@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>你的职业路径难度指南</title>
+  <style>
+    /* ===== 全局 ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f5f0eb;
+      --card: #fffdf9;
+      --accent1: #d4845a;   /* 橙砖 */
+      --accent2: #6b9e8c;   /* 青绿 */
+      --accent3: #8e7db5;   /* 浅紫 */
+      --accent4: #c9a84c;   /* 金 */
+      --accent5: #b05656;   /* 红 */
+      --text: #2e2a25;
+      --muted: #7a7068;
+      --border: #e4ddd4;
+      --shadow: rgba(60,45,30,.10);
+    }
+
+    body {
+      font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 0 0 80px;
+    }
+
+    /* ===== 顶部 Hero ===== */
+    .hero {
+      background: linear-gradient(135deg, #3b2f20 0%, #6b4c30 60%, #a0714f 100%);
+      color: #fff;
+      text-align: center;
+      padding: 64px 24px 52px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .hero-tag {
+      display: inline-block;
+      background: rgba(255,255,255,.15);
+      border: 1px solid rgba(255,255,255,.3);
+      border-radius: 20px;
+      font-size: 12px;
+      letter-spacing: .12em;
+      padding: 4px 14px;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+    }
+    .hero h1 {
+      font-size: clamp(1.8rem, 5vw, 2.8rem);
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 16px;
+    }
+    .hero h1 em { color: #f5c887; font-style: normal; }
+    .hero p {
+      font-size: 1rem;
+      color: rgba(255,255,255,.75);
+      max-width: 520px;
+      margin: 0 auto;
+      line-height: 1.8;
+    }
+
+    /* ===== 导读卡 ===== */
+    .intro-strip {
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      padding: 24px 0;
+    }
+    .intro-inner {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      gap: 32px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .intro-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: .9rem;
+    }
+    .dot {
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* ===== 主体容器 ===== */
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 48px 24px 0;
+    }
+
+    /* ===== 区块标题 ===== */
+    .section-title {
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      color: var(--muted);
+      text-transform: uppercase;
+      border-left: 3px solid var(--accent1);
+      padding-left: 12px;
+      margin-bottom: 28px;
+    }
+
+    /* ===== 路径卡片 ===== */
+    .path-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px 32px 28px;
+      margin-bottom: 28px;
+      box-shadow: 0 2px 16px var(--shadow);
+      position: relative;
+      overflow: hidden;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .path-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 28px var(--shadow);
+    }
+    .path-card::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+    }
+    .card-a::before { background: var(--accent2); }
+    .card-b::before { background: var(--accent3); }
+    .card-c::before { background: var(--accent1); }
+    .card-d::before { background: var(--accent4); }
+    .card-e::before { background: var(--accent5); }
+
+    /* 路径头部 */
+    .card-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 18px;
+      margin-bottom: 20px;
+    }
+    .card-icon {
+      width: 52px; height: 52px;
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem;
+      flex-shrink: 0;
+    }
+    .icon-a { background: #e8f5f0; }
+    .icon-b { background: #ede9f7; }
+    .icon-c { background: #fdf0ea; }
+    .icon-d { background: #fef8e7; }
+    .icon-e { background: #fdeaea; }
+
+    .card-title-group { flex: 1; }
+    .card-label {
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .label-a { color: var(--accent2); }
+    .label-b { color: var(--accent3); }
+    .label-c { color: var(--accent1); }
+    .label-d { color: var(--accent4); }
+    .label-e { color: var(--accent5); }
+
+    .card-name {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .card-subtitle {
+      font-size: .85rem;
+      color: var(--muted);
+      margin-top: 3px;
+    }
+
+    /* 难度条 */
+    .difficulty-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+    .difficulty-label {
+      font-size: .8rem;
+      color: var(--muted);
+      white-space: nowrap;
+      width: 48px;
+    }
+    .bar-track {
+      flex: 1;
+      height: 8px;
+      background: #eee;
+      border-radius: 99px;
+      overflow: hidden;
+    }
+    .bar-fill {
+      height: 100%;
+      border-radius: 99px;
+      position: relative;
+      animation: barGrow .8s cubic-bezier(.4,0,.2,1) both;
+    }
+    @keyframes barGrow {
+      from { width: 0 !important; }
+    }
+    .bar-text {
+      font-size: .8rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    /* 正文叙述 */
+    .card-body {
+      font-size: .92rem;
+      line-height: 1.9;
+      color: #443c34;
+    }
+    .card-body p { margin-bottom: 12px; }
+    .card-body strong { color: var(--text); }
+
+    /* 关卡列表 */
+    .hurdles {
+      list-style: none;
+      margin: 14px 0 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .hurdle-item {
+      display: flex;
+      gap: 12px;
+      background: #f9f6f2;
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-size: .88rem;
+      line-height: 1.6;
+    }
+    .hurdle-icon { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+
+    /* 底部徽章行 */
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 18px;
+      border-top: 1px solid var(--border);
+      padding-top: 16px;
+    }
+    .badge {
+      font-size: .75rem;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 99px;
+      border: 1px solid currentColor;
+    }
+    .badge-green { color: #3a8f6e; background: #eaf6f0; }
+    .badge-yellow { color: #9a7a10; background: #fef9e5; }
+    .badge-red { color: #a03030; background: #fceaea; }
+    .badge-blue { color: #3a5fa8; background: #e8eef9; }
+
+    /* ===== 汇总对比 ===== */
+    .compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .88rem;
+      background: var(--card);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 2px 16px var(--shadow);
+      margin-bottom: 48px;
+    }
+    .compare-table th {
+      background: #3b2f20;
+      color: #f5e9d8;
+      font-weight: 600;
+      padding: 14px 16px;
+      text-align: left;
+    }
+    .compare-table td {
+      padding: 13px 16px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+    .compare-table tr:last-child td { border-bottom: none; }
+    .compare-table tr:hover td { background: #f9f5f0; }
+
+    .star-bar { display: flex; gap: 3px; }
+    .star { font-size: .85rem; }
+    .star.on { color: #e8a030; }
+    .star.off { color: #d9d0c5; }
+
+    /* ===== 推荐路线图 ===== */
+    .roadmap {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      margin-bottom: 56px;
+    }
+    .roadmap-step {
+      display: flex;
+      gap: 0;
+      align-items: stretch;
+    }
+    .roadmap-left {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 48px;
+      flex-shrink: 0;
+    }
+    .step-circle {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: #3b2f20;
+      color: #fff;
+      font-size: .85rem;
+      font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      z-index: 1;
+    }
+    .step-line {
+      width: 2px;
+      flex: 1;
+      background: #d9d0c5;
+      margin: 4px 0;
+    }
+    .roadmap-step:last-child .step-line { display: none; }
+    .roadmap-content {
+      flex: 1;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px 24px;
+      margin: 0 0 16px 16px;
+    }
+    .roadmap-phase {
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .roadmap-title {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .roadmap-desc {
+      font-size: .88rem;
+      color: #54493f;
+      line-height: 1.8;
+    }
+    .roadmap-income {
+      display: inline-block;
+      margin-top: 10px;
+      background: #f0faf5;
+      color: #2e7d5a;
+      border-radius: 8px;
+      padding: 5px 12px;
+      font-size: .82rem;
+      font-weight: 700;
+    }
+
+    /* ===== 尾部提示 ===== */
+    .footer-tip {
+      text-align: center;
+      font-size: .85rem;
+      color: var(--muted);
+      line-height: 1.9;
+      padding: 0 24px;
+    }
+    .footer-tip strong { color: var(--text); }
+
+    /* ===== 响应式 ===== */
+    @media (max-width: 600px) {
+      .path-card { padding: 22px 18px; }
+      .card-header { gap: 12px; }
+      .compare-table th, .compare-table td { padding: 10px 10px; font-size: .82rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-tag">职业路径难度指南</div>
+  <h1>你面前有 <em>五条路</em><br/>难度各不相同</h1>
+  <p>每一条路，都有它的门槛、关卡和奖励。<br/>读完这份指南，你会知道——哪条路值得走，哪条路需要做好准备。</p>
+</div>
+
+<!-- 导读 -->
+<div class="intro-strip">
+  <div class="intro-inner">
+    <div class="intro-item"><div class="dot" style="background:#6b9e8c"></div>路径A：事业编美术岗</div>
+    <div class="intro-item"><div class="dot" style="background:#8e7db5"></div>路径B：公立学校教师</div>
+    <div class="intro-item"><div class="dot" style="background:#d4845a"></div>路径C：培训机构教师</div>
+    <div class="intro-item"><div class="dot" style="background:#c9a84c"></div>路径D：现岗等待转编</div>
+    <div class="intro-item"><div class="dot" style="background:#b05656"></div>路径E：线上接单副业</div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ===== 路径A ===== -->
+  <div class="section-title">路径 A</div>
+  <div class="path-card card-a">
+    <div class="card-header">
+      <div class="card-icon icon-a">🏛️</div>
+      <div class="card-title-group">
+        <div class="card-label label-a">推荐 · 难度中等偏高</div>
+        <div class="card-name">事业单位美术岗（定向残疾人岗位）</div>
+        <div class="card-subtitle">鹰潭市美术馆 / 文化馆 / 宣传部门 等</div>
+      </div>
+    </div>
+
+    <div class="difficulty-row">
+      <span class="difficulty-label">整体难度</span>
+      <div class="bar-track"><div class="bar-fill" style="width:62%; background: var(--accent2);"></div></div>
+      <span class="bar-text" style="color:var(--accent2)">★★★☆☆</span>
+    </div>
+
+    <div class="card-body">
+      <p>你拥有美术本科学历，专业匹配度极高。鹰潭市美术馆已在 2025 年省级事业单位招聘中专门设立「美术设计岗」——<strong>这个岗位，就是为你这样的人准备的</strong>。</p>
+
+      <p>但这条路并不轻松，你会遇到三道真实的关卡：</p>
+
+      <ul class="hurdles">
+        <li class="hurdle-item">
+          <span class="hurdle-icon">⏳</span>
+          <div><strong>关卡一：机会稀少，你需要等待。</strong><br/>鹰潭每年针对残疾人的美术类定向岗位开放次数极少，有时2-3年才一次。你需要长期盯着鹰潭市人社局、鹰潭市残联官网，把招聘提醒设置好，不能错过窗口期。</div>
+        </li>
+        <li class="hurdle-item">
+          <span class="hurdle-icon">📋</span>
+          <div><strong>关卡二：笔试需要准备。</strong><br/>笔试内容涵盖行政能力测验（行测）和专业知识，这不是临时抱佛脚能过的。建议提前 3 到 6 个月系统备考，市面上有专门的事业编行测教材，每天投入 1-2 小时即可。</div>
+        </li>
+        <li class="hurdle-item">
+          <span class="hurdle-icon">🏥</span>
+          <div><strong>关卡三：体检听力关卡，这是最关键的一步。</strong><br/>国家标准要求：<em>佩戴助听器后，在 3 米内能听到谈话</em>，方为合格。你的听力等级越轻（三、四级），通过概率越大；若是重度（一、二级），存在被淘汰风险。<strong>在一切行动之前，请先去医院做正式的纯音听阈测试，搞清楚自己的等级。</strong></div>
+        </li>
+      </ul>
+
+      <p>一旦通过，你将得到最稳定的回报——事业编制、4,500～6,500 元/月、完整五险一金，以及一份不会消失的「铁饭碗」。</p>
+    </div>
+
+    <div class="badge-row">
+      <span class="badge badge-green">收入提升 ↑70%</span>
+      <span class="badge badge-green">事业编 最稳定</span>
+      <span class="badge badge-yellow">体检存在风险</span>
+      <span class="badge badge-yellow">机会窗口期不定</span>
+    </div>
+  </div>
+
+  <!-- ===== 路径B ===== -->
+  <div class="section-title">路径 B</div>
+  <div class="path-card card-b">
+    <div class="card-header">
+      <div class="card-icon icon-b">🏫</div>
+      <div class="card-title-group">
+        <div class="card-label label-b">高回报 · 难度高</div>
+        <div class="card-name">公立中小学美术教师（正式教编）</div>
+        <div class="card-subtitle">鹰潭市 / 余江区 / 贵溪市 中小学校</div>
+      </div>
+    </div>
+
+    <div class="difficulty-row">
+      <span class="difficulty-label">整体难度</span>
+      <div class="bar-track"><div class="bar-fill" style="width:78%; background: var(--accent3);"></div></div>
+      <span class="bar-text" style="color:var(--accent3)">★★★★☆</span>
+    </div>
+
+    <div class="card-body">
+      <p>这是五条路中<strong>薪资最高的那一条</strong>。鹰潭公立学校教师的月薪主流在 6,000～9,000 元，余江区平均达到约 9,100 元——几乎是你现在收入的两倍多。如果你成功了，生活质量会有质的飞跃。</p>
+
+      <p>但这条路对你而言，有几个<strong>现实的挑战</strong>，你需要诚实地面对：</p>
+
+      <ul class="hurdles">
+        <li class="hurdle-item">
+          <span class="hurdle-icon">📜</span>
+          <div><strong>挑战一：教师资格证是硬门槛。</strong><br/>如果你还没有美术教师资格证，需要先通过全国教师资格考试（笔试 + 面试），每年有两次机会（3 月和 9 月）。这大约需要 6 到 12 个月的准备时间。</div>
+        </li>
+        <li class="hurdle-item">
+          <span class="hurdle-icon">🏥</span>
+          <div><strong>挑战二：体检听力标准同样严格。</strong><br/>与路径 A 完全相同，佩戴助听器后需能在 3 米内听到谈话。这是进入的「门槛线」，必须提前确认自己是否能达标。</div>
+        </li>
+        <li class="hurdle-item">
+          <span class="hurdle-icon">🎤</span>
+          <div><strong>挑战三：课堂教学对听力有实质要求。</strong><br/>一个班几十名学生，有人在后排提问，有人在交头接耳，有人发出各种声音——这种环境对听障老师来说是持续的压力。你需要提前想好如何应对，比如使用「实时字幕」工具、优化课堂提问方式，或者优先选择班级较小的区县学校。</div>
+        </li>
+        <li class="hurdle-item">
+          <span class="hurdle-icon">🎓</span>
+          <div><strong>挑战四：城区优质学校倾向招硕士。</strong><br/>鹰潭市直学校（第一中学等）引进要求硕士及以上，本科学历在这个层次竞争处于劣势。但区县级学校（余江区、贵溪市）接受本科，是更现实的目标。</div>
+        </li>
+      </ul>
+
+      <p>这条路不是不能走，但你要接受「准备期较长、工作中需要持续适应」的现实。有一个替代方向值得考虑：<strong>特殊教育学校</strong>——那里服务的本就是听障孩子，对听障老师反而更包容，甚至是优势。</p>
+    </div>
+
+    <div class="badge-row">
+      <span class="badge badge-green">月薪 6K~9K 最高</span>
+      <span class="badge badge-green">教编 终身稳定</span>
+      <span class="badge badge-red">体检风险高</span>
+      <span class="badge badge-red">课堂听障挑战大</span>
+      <span class="badge badge-yellow">需先考教资</span>
+    </div>
+  </div>
+
+  <!-- ===== 路径C ===== -->
+  <div class="section-title">路径 C</div>
+  <div class="path-card card-c">
+    <div class="card-header">
+      <div class="card-icon icon-c">🎨</div>
+      <div class="card-title-group">
+        <div class="card-label label-c">短期首选 · 难度低</div>
+        <div class="card-name">民办美术培训机构教师</div>
+        <div class="card-subtitle">童画美术 / 本地少儿美术机构（鹰潭有 3 家以上）</div>
+      </div>
+    </div>
+
+    <div class="difficulty-row">
+      <span class="difficulty-label">整体难度</span>
+      <div class="bar-track"><div class="bar-fill" style="width:28%; background: var(--accent1);"></div></div>
+      <span class="bar-text" style="color:var(--accent1)">★★☆☆☆</span>
+    </div>
+
+    <div class="card-body">
+      <p>这条路的门槛，是五条路中<strong>最低的那一条</strong>。你不需要参加任何考试，不需要等待特定的招聘窗口，<strong>今天就可以投简历，最快下周就能面试</strong>。</p>
+
+      <p>对你来说，还有一个特别的好消息：这里的听障障碍<strong>影响最小</strong>。少儿美术课通常 3 到 25 人，以示范、带画为主，语言交流量远小于文化课——小班的环境，加上助听器，完全可以正常上课。</p>
+
+      <ul class="hurdles">
+        <li class="hurdle-item">
+          <span class="hurdle-icon">⚡</span>
+          <div><strong>你需要面对的主要问题：稳定性有限。</strong><br/>培训机构属于商业机构，受市场和政策影响较大。美术属于素质教育类（不在「双减」打击范围内），比学科类更安全，但也不是完全免疫。选择全国连锁品牌（如童画）会比小型本地机构更稳定。</div>
+        </li>
+        <li class="hurdle-item">
+          <span class="hurdle-icon">🧾</span>
+          <div><strong>社保可能不完整。</strong><br/>小型机构可能不缴纳完整五险一金，入职前要问清楚。这影响你未来的养老金积累，是长期成本，不能忽视。</div>
+        </li>
+      </ul>
+
+      <p>这条路适合作为<strong>「过渡期的最优解」</strong>——在你等待事业编机会、备考教师资格证的阶段，先来这里，把收入提升到 5,000～6,000 元，同时保持在美术教学领域的实战经验积累。</p>
+    </div>
+
+    <div class="badge-row">
+      <span class="badge badge-green">随时可投 无需等待</span>
+      <span class="badge badge-green">听障影响最小</span>
+      <span class="badge badge-yellow">稳定性中等</span>
+      <span class="badge badge-yellow">社保需确认</span>
+    </div>
+  </div>
+
+  <!-- ===== 路径D ===== -->
+  <div class="section-title">路径 D</div>
+  <div class="path-card card-d">
+    <div class="card-header">
+      <div class="card-icon icon-d">⏰</div>
+      <div class="card-title-group">
+        <div class="card-label label-d">现状维持 · 难度极低但回报也低</div>
+        <div class="card-name">现岗政府合同工，等待转编</div>
+        <div class="card-subtitle">原有岗位 · 被动等待单位安排</div>
+      </div>
+    </div>
+
+    <div class="difficulty-row">
+      <span class="difficulty-label">整体难度</span>
+      <div class="bar-track"><div class="bar-fill" style="width:15%; background: var(--accent4);"></div></div>
+      <span class="bar-text" style="color:var(--accent4)">★☆☆☆☆</span>
+    </div>
+
+    <div class="card-body">
+      <p>这条路，<strong>几乎不需要你做任何事</strong>——继续上班，继续拿现在的工资，等着看单位有没有政策变化。</p>
+
+      <p>从「难度」这个维度来说，它是最简单的。但你要清楚代价：</p>
+
+      <ul class="hurdles">
+        <li class="hurdle-item">
+          <span class="hurdle-icon">💸</span>
+          <div><strong>收入几乎不会涨。</strong><br/>政府合同工的工资与最低工资标准挂钩，大幅提升的可能性接近于零。你现在是 3,800～4,000 元，两年后很可能还是这个数字，只是跟着最低工资小幅调整。</div>
+        </li>
+        <li class="hurdle-item">
+          <span class="hurdle-icon">⚠️</span>
+          <div><strong>合同存在不续签风险。</strong><br/>国家层面正在清理编外人员，虽然短期内鹰潭尚未大规模执行，但这是悬在合同工头上的不确定性。</div>
+        </li>
+        <li class="hurdle-item">
+          <span class="hurdle-icon">🔒</span>
+          <div><strong>「转编」这件事，你推不动。</strong><br/>虽然新政要求单位须为残疾人安排编制岗位，但具体执行时间、名额分配全由单位决定，你无法主动施加影响，只能被动等待。</div>
+        </li>
+      </ul>
+
+      <p>这条路不是错误，它是一个<strong>「兜底选项」</strong>——当你在积极探索其他路径时，先不离开这个岗位，保持稳定是合理的。但<strong>把它作为主要路径，就是在原地踏步</strong>。</p>
+    </div>
+
+    <div class="badge-row">
+      <span class="badge badge-green">零额外努力</span>
+      <span class="badge badge-red">收入几乎不涨</span>
+      <span class="badge badge-red">合同风险存在</span>
+      <span class="badge badge-yellow">仅适合过渡期兜底</span>
+    </div>
+  </div>
+
+  <!-- ===== 路径E ===== -->
+  <div class="section-title">路径 E</div>
+  <div class="path-card card-e">
+    <div class="card-header">
+      <div class="card-icon icon-e">💻</div>
+      <div class="card-title-group">
+        <div class="card-label label-e">立即启动 · 难度低且听障友好</div>
+        <div class="card-name">线上美术接单（插画 / 设计副业）</div>
+        <div class="card-subtitle">小红书 / 微博约稿 · 猪八戒 · 稿定设计等平台</div>
+      </div>
+    </div>
+
+    <div class="difficulty-row">
+      <span class="difficulty-label">整体难度</span>
+      <div class="bar-track"><div class="bar-fill" style="width:35%; background: var(--accent5);"></div></div>
+      <span class="bar-text" style="color:var(--accent5)">★★☆☆☆</span>
+    </div>
+
+    <div class="card-body">
+      <p>这条路有一个你其他路径都没有的优点：<strong>听障对它完全没有影响</strong>。线上接单，你和客户通过文字沟通，客户看的是你的作品，不是你的听力。在这里，你的耳朵好不好，不重要。</p>
+
+      <p>它也是唯一一条<strong>「今天就能开始」</strong>的路——打开小红书，整理三幅你最满意的画，发出去，就已经开始了。</p>
+
+      <ul class="hurdles">
+        <li class="hurdle-item">
+          <span class="hurdle-icon">🌱</span>
+          <div><strong>主要挑战：冷启动期需要耐心。</strong><br/>最初 1 到 3 个月，可能几乎没有收入。这个阶段你需要持续发布作品、积累粉丝，是一个「先付出、后收获」的过程。不要因为第一个月没接到单子就放弃。</div>
+        </li>
+        <li class="hurdle-item">
+          <span class="hurdle-icon">🤖</span>
+          <div><strong>AI 绘画的冲击是真实存在的。</strong><br/>低价、简单的设计需求正在被 AI 替代。你的应对策略是<strong>走个人风格路线</strong>——有辨识度的国风插画、治愈系手绘、定制头像等细分领域，是 AI 短期内替代不了的。</div>
+        </li>
+      </ul>
+
+      <p>一旦积累起来，副业月入 2,000～5,000 元并不罕见。还有一个意外的惊喜：<strong>你喜欢旅游</strong>——旅行写生、沿途速写，既是你的爱好，又能产出内容，再转化为接单曝光，这三件事可以串联成一个正向循环。</p>
+    </div>
+
+    <div class="badge-row">
+      <span class="badge badge-green">今天就能开始</span>
+      <span class="badge badge-green">听障完全无障碍</span>
+      <span class="badge badge-green">与旅游爱好协同</span>
+      <span class="badge badge-yellow">冷启动需耐心</span>
+    </div>
+  </div>
+
+  <!-- ===== 综合对比 ===== -->
+  <div class="section-title" style="margin-top: 16px;">综合对比一览</div>
+  <table class="compare-table">
+    <thead>
+      <tr>
+        <th>路径</th>
+        <th>难度</th>
+        <th>月收入区间</th>
+        <th>稳定性</th>
+        <th>听障友好度</th>
+        <th>可行度</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>A 事业编美术岗</strong></td>
+        <td>
+          <div class="star-bar">
+            <span class="star on">★</span><span class="star on">★</span><span class="star on">★</span><span class="star off">★</span><span class="star off">★</span>
+          </div>
+        </td>
+        <td>4,500～6,500 元</td>
+        <td><span class="badge badge-green">极高</span></td>
+        <td><span class="badge badge-yellow">中等</span></td>
+        <td><span class="badge badge-yellow">中等</span></td>
+      </tr>
+      <tr>
+        <td><strong>B 公立学校教师</strong></td>
+        <td>
+          <div class="star-bar">
+            <span class="star on">★</span><span class="star on">★</span><span class="star on">★</span><span class="star on">★</span><span class="star off">★</span>
+          </div>
+        </td>
+        <td>6,000～9,000 元</td>
+        <td><span class="badge badge-green">极高</span></td>
+        <td><span class="badge badge-red">较低</span></td>
+        <td><span class="badge badge-red">较难</span></td>
+      </tr>
+      <tr>
+        <td><strong>C 培训机构教师</strong></td>
+        <td>
+          <div class="star-bar">
+            <span class="star on">★</span><span class="star on">★</span><span class="star off">★</span><span class="star off">★</span><span class="star off">★</span>
+          </div>
+        </td>
+        <td>4,000～7,000 元</td>
+        <td><span class="badge badge-yellow">中等</span></td>
+        <td><span class="badge badge-green">高</span></td>
+        <td><span class="badge badge-green">容易</span></td>
+      </tr>
+      <tr>
+        <td><strong>D 现岗等待</strong></td>
+        <td>
+          <div class="star-bar">
+            <span class="star on">★</span><span class="star off">★</span><span class="star off">★</span><span class="star off">★</span><span class="star off">★</span>
+          </div>
+        </td>
+        <td>3,800～4,200 元</td>
+        <td><span class="badge badge-yellow">中等</span></td>
+        <td><span class="badge badge-green">高</span></td>
+        <td><span class="badge badge-green">无需额外行动</span></td>
+      </tr>
+      <tr>
+        <td><strong>E 线上副业</strong></td>
+        <td>
+          <div class="star-bar">
+            <span class="star on">★</span><span class="star on">★</span><span class="star off">★</span><span class="star off">★</span><span class="star off">★</span>
+          </div>
+        </td>
+        <td>+500～5,000 元（叠加）</td>
+        <td><span class="badge badge-yellow">收入波动</span></td>
+        <td><span class="badge badge-green">极高</span></td>
+        <td><span class="badge badge-green">随时可启动</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ===== 推荐路线图 ===== -->
+  <div class="section-title">推荐的走法：三步走</div>
+  <div class="roadmap">
+    <div class="roadmap-step">
+      <div class="roadmap-left">
+        <div class="step-circle">1</div>
+        <div class="step-line"></div>
+      </div>
+      <div class="roadmap-content">
+        <div class="roadmap-phase">现在 → 3 个月内</div>
+        <div class="roadmap-title">🌱 先动起来，不要等</div>
+        <div class="roadmap-desc">
+          去医院做一次正式听力测试，确认残疾等级——这是一切规划的前提。<br/>
+          同时，整理你最好的 5 幅作品，建立小红书 / 微博主页，开始发内容。你不需要等任何人许可，就能开始这件事。
+        </div>
+        <div class="roadmap-income">预期月收入：3,800 + 500～1,500 元（副业起步期）</div>
+      </div>
+    </div>
+    <div class="roadmap-step">
+      <div class="roadmap-left">
+        <div class="step-circle">2</div>
+        <div class="step-line"></div>
+      </div>
+      <div class="roadmap-content">
+        <div class="roadmap-phase">3 个月 → 1.5 年</div>
+        <div class="roadmap-title">🎨 切换主业，稳住收入</div>
+        <div class="roadmap-desc">
+          向童画等连锁机构投递简历，切换到培训机构教师岗位，主业收入提升到 5,000～6,000 元。<br/>
+          同步备考教师资格证（每年 3 月 / 9 月报名），为下一阶段做铺垫。<br/>
+          副业持续接单，积累口碑和粉丝，收入慢慢稳定到 2,000 元以上。
+        </div>
+        <div class="roadmap-income">预期月收入：5,500 + 2,000 = 约 7,500 元</div>
+      </div>
+    </div>
+    <div class="roadmap-step">
+      <div class="roadmap-left">
+        <div class="step-circle">3</div>
+        <div class="step-line"></div>
+      </div>
+      <div class="roadmap-content">
+        <div class="roadmap-phase">1.5 年 → 3 年</div>
+        <div class="roadmap-title">🏛️ 把握机会，冲编制</div>
+        <div class="roadmap-desc">
+          持续关注鹰潭市人社局和残联官网的残疾人定向招聘公告。<br/>
+          一旦有事业单位美术岗（路径 A）或区县美术教师岗（路径 B）开放，带着你的教资、作品集和积累的教学经验，全力冲一次。<br/>
+          这时候你已经不是「裸考」，而是有准备、有底气地出发。
+        </div>
+        <div class="roadmap-income">预期月收入（若成功）：7,000 + 3,000 = 约 10,000 元</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 尾部 -->
+  <div class="footer-tip">
+    <p>每一条路，都有它的合理性。<strong>没有最好的路，只有最适合你现在状态的路。</strong></p>
+    <p style="margin-top: 8px;">你不需要在第一步就做对所有决定——<br/>先动起来，边走边调整，才是最真实的前进方式。</p>
+    <p style="margin-top: 20px; font-size: .78rem; color: #b0a898;">数据来源：鹰潭市政府统计公报 / 江西省人社厅 / 职友集招聘平台 / 鹰潭市残联官网 · 整理于 2026 年 4 月</p>
+  </div>
+
+</div>
+</body>
+</html>
